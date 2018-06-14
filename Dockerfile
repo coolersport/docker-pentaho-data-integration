@@ -1,4 +1,4 @@
-FROM anapsix/alpine-java:8_jdk_unlimited
+FROM coolersport/alpine-java:8u172b11_jdk_unlimited
 
 MAINTAINER Tien Tran
 
