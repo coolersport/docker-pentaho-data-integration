@@ -2,16 +2,23 @@ FROM anapsix/alpine-java:8_jdk_unlimited
 
 MAINTAINER Tien Tran
 
-RUN apk --no-cache --update add curl && \
-    addgroup alpine && \
-    adduser  -G alpine -s /bin/sh -D alpine && \
-    echo "alpine:$(date | md5sum | head -c 32)" | /usr/sbin/chpasswd && \
-    curl -fsSL https://nchc.dl.sourceforge.net/project/pentaho/Pentaho%208.0/client-tools/pdi-ce-8.0.0.0-28.zip -o /home/alpine/pdi-ce.zip && \
-    cd /home/alpine && \
+ENV TZ Australia/Melbourne
+
+COPY rootfs /
+
+RUN apk --no-cache --update add curl tzdata && \
+    addgroup pentaho && \
+    adduser  -G pentaho -s /bin/sh -D pentaho && \
+    echo "pentaho:$(date | md5sum | head -c 32)" | /usr/sbin/chpasswd && \
+    curl -fsSL https://nchc.dl.sourceforge.net/project/pentaho/Data%20Integration/7.1/pdi-ce-7.1.0.0-12.zip -o /home/pentaho/pdi-ce.zip && \
+    cd /home/pentaho && \
     unzip pdi-ce.zip && \
-    rm -rf /home/alpine/pdi-ce.zip && \
-    chown -R alpine:alpine /home/alpine/data-integration && \
+    rm -rf /home/pentaho/pdi-ce.zip && \
+    chown -R pentaho:pentaho /home/pentaho/data-integration && \
+    chmod u+x /entrypoint.sh && \
     rm -rf /apk /tmp/* /var/cache/apk/*
 
-CMD ["/bin/bash"]
-#CMD ["su", "-m", "-c", "/home/alpine/data-integration/kitchen.sh", "alpine"]
+WORKDIR /home/pentaho
+
+ENTRYPOINT ["/entrypoint.sh"]
+#CMD ["su", "-m", "-c", "/home/pentaho/data-integration/kitchen.sh", "pentaho"]
