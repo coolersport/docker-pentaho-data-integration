@@ -6,7 +6,7 @@ ARG download_url
 ENV TZ=Australia/Melbourne \
     DOWNLOAD_URL=$download_url
 
-COPY rootfs /
+COPY 8/rootfs /
 
 RUN apk update && apk upgrade && apk --no-cache add bash curl tzdata dpkg && \
     addgroup pentaho && \
