@@ -4,7 +4,7 @@ MAINTAINER Tien Tran
 
 ENV TZ Australia/Melbourne
 
-COPY 7/rootfs /
+COPY rootfs /
 
 RUN apk --no-cache --update add curl tzdata && \
     addgroup pentaho && \
